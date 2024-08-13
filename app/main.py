@@ -4,7 +4,14 @@ import pandas as pd
 
 
 def main():
-    pass
+    st.set_page_config(
+        page_title = 'Breast Cancer Predictor',
+        page_icon= ':female_doctor:',
+        layout= 'wide',
+        initial_sidebar_state= 'expanded'
+    )
+
+    st.write('Hello woorlds')
 
 
 
