@@ -51,12 +51,20 @@ def add_sidebar():
         ("Fractal dimension (worst)", "fractal_dimension_worst"),
     ]
 
+    # input data dictionary
+    input_dict = {}
+    
+
+    # looping through all the key, values in the sidebar_labels
     for label, key in slider_labels:
-        st.sidebar.slider(
+        input_dict[key] = st.sidebar.slider(
             label,
             min_value = float(0),
-            max_value = float(data[key].max())
+            max_value = float(data[key].max()),
+            value = float(data[key].mean())
         )
+
+    return input_dict
 
 # main function
 def main():
@@ -69,7 +77,8 @@ def main():
 
     # sidebar
 
-    add_sidebar()
+    input_data = add_sidebar()
+    # st.write(input_data)
     # container
 
     with st.container():
