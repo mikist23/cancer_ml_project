@@ -13,24 +13,6 @@ def get_clean_data():
     data['diagnosis'] = data['diagnosis'].map({'M':1,"B":0})
     return data
 
-# Scaled data
-
-def get_scaled_data(input_dict):
-    data = get_clean_data()
-
-    X = data.drop(columns = 'diagnosis')
-    
-
-
-
-
-
-
-
-
-
-
-
 
 
 # sidebar section
@@ -87,12 +69,33 @@ def add_sidebar():
         )
 
     return input_dict
-# radar_chart_visualization
+
+# Scaled data
+
+def get_scaled_data(input_dict):
+    data = get_clean_data()
+
+    X = data.drop(['diagnosis'], axis=1)
+
+    scaled_dict = {}
+
+    for key,value in input_dict.items():
+        max_val = X[key].max()
+        min_val = X[key].min()
+        scaled_value = (value - min_val)/(max_val - min_val)
+        scaled_dict[key] = scaled_value
+
+    return scaled_dict
+
+
+# radar_chart_visualization col 1
 def get_radar_chart(input_data):
+    input_data = get_scaled_data(input_data)
+
     categories = ['Radius','Texture','Perimeter','Area','Smoothness',
                  'Compactness','Concavity','Concave points','Symmetry','Fractal dimension' ]
     
-
+    # Create the radar chart
     fig = go.Figure()
 
     # Add the traces
@@ -134,14 +137,16 @@ def get_radar_chart(input_data):
     polar=dict(
         radialaxis=dict(
         visible=True,
-        range=[0, 5]
+        range=[0, 1]
         )),
     showlegend=True
     )
 
     return fig
 
-
+# add predictions col 2
+def add_predictions(input_data):
+    pass
 
 
 
@@ -170,7 +175,7 @@ def main():
         radar_chart = get_radar_chart(input_data)
         st.plotly_chart(radar_chart)
     with col2:
-        st.write('This is col 2')  
+        add_predictions(input_data) 
 
 
 if __name__ == '__main__':
