@@ -67,9 +67,9 @@ def add_sidebar():
 
     return input_dict
 # radar_chart_visualization
-def get_radar_chart():
-    categories = ['processing cost','mechanical properties','chemical stability',
-                'thermal stability', 'device integration']
+def get_radar_chart(input_data):
+    categories = ['Radius','Texture','Perimeter','Area','Smoothness',
+                 'Compactness','Concavity','Concave points','Symmetry','Fractal dimension' ]
 
     fig = go.Figure()
 
@@ -95,7 +95,7 @@ def get_radar_chart():
     showlegend=False
     )
 
-    fig.show()
+    return fig
 
 
 
@@ -123,7 +123,8 @@ def main():
     col1, col2 = st.columns([4,1]) 
 
     with col1:
-        get_radar_chart(input_data)
+        radar_chart = get_radar_chart(input_data)
+        st.plotly_chart(radar_chart)
     with col2:
         st.write('This is col 2')  
 
