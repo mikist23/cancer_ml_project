@@ -1,8 +1,22 @@
+/* COL2 CUSTOM STYLES */
 .st-emotion-cache-j5r0tf{
    padding: 1rem;
    border-radius: 0.5rem;
    background-color: #7E99AB;
 } 
+/* PREDICTION STYLES */
+.diagnosis{
+   color: #ffffff;
+   padding: 0.2rem 0.5rem;
+   border-radius: 0.5rem;
+}
+
+.diagnosis.benign {
+   background-color: #01DB4B;
+}
+.diagnosis.maligant {
+   background-color: #ff4b4b;
+}
 
 /* style.css */
 
