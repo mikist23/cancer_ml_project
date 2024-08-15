@@ -155,6 +155,9 @@ def add_predictions(input_data):
     
     # Making real predictions using the model
     prediction =  model.predict(input_array_scaled)
+    
+    st.subheader("Cell Cluster Prediction")
+    st.write("The cell cluster is:")
 
     if prediction[0] == 0:
         st.write('Begnin')
@@ -164,6 +167,7 @@ def add_predictions(input_data):
 
     st.write("The probability of being Benign: ",model.predict_proba(input_array_scaled)[0][0])
     st.write("The probability of being Malicious: ",model.predict_proba(input_array_scaled)[0][1])
+    st.write("This app can aassist medical professionals in making a diagnosis.")
 
 
 # main function
