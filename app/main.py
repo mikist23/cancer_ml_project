@@ -151,7 +151,19 @@ def add_predictions(input_data):
     scaler = pickle.load(open('scaler.pkl', 'rb'))
 
     input_array = np.array(list(input_data.values())).reshape(1,-1)
-    st.write(input_array)
+    input_array_scaled = scaler.transform(input_array)
+    
+    # Making real predictions using the model
+    prediction =  model.predict(input_array_scaled)
+
+    if prediction[0] == 0:
+        st.write('Begnin')
+    else:
+        st.write('Malicious')
+    
+
+    st.write("The probability of being Benign: ",model.predict_proba(input_array_scaled)[0][0])
+    st.write("The probability of being Malicious: ",model.predict_proba(input_array_scaled)[0][1])
 
 
 # main function
