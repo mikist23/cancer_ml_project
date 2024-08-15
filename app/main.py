@@ -184,6 +184,7 @@ def main():
 
     with col2:
         add_predictions(input_data)
+        
 
 
 if __name__ == '__main__':
