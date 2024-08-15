@@ -4,25 +4,31 @@ import pandas as pd
 import plotly.graph_objects as go
 import numpy as np
 
+# Set page config at the very top
+st.set_page_config(
+    page_title='Breast Cancer Predictor',
+    page_icon=':female_doctor:',
+    layout='wide',
+    initial_sidebar_state='expanded'
+)
 
+# Load custom CSS
+with open('assets/style.css') as f:
+    st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 # cleaned data
-
 def get_clean_data():
     data = pd.read_csv('data.csv')
-    data = data.drop(['Unnamed: 32', 'id'], axis = 1)
+    data = data.drop(['Unnamed: 32', 'id'], axis=1)
     data['diagnosis'] = data['diagnosis'].map({'M':1,"B":0})
     return data
 
-
-
 # sidebar section
 def add_sidebar():
-    st.sidebar.header('Cell Nuclei Detals')
+    st.sidebar.header('Cell Nuclei Details')
 
     data = get_clean_data()
 
-      # Define the labels
     slider_labels = [
         ("Radius (mean)", "radius_mean"),
         ("Texture (mean)", "texture_mean"),
@@ -56,23 +62,19 @@ def add_sidebar():
         ("Fractal dimension (worst)", "fractal_dimension_worst"),
     ]
 
-    # input data dictionary
     input_dict = {}
-    
 
-    # looping through all the key, values in the sidebar_labels
     for label, key in slider_labels:
         input_dict[key] = st.sidebar.slider(
             label,
-            min_value = float(0),
-            max_value = float(data[key].max()),
-            value = float(data[key].mean())
+            min_value=float(0),
+            max_value=float(data[key].max()),
+            value=float(data[key].mean())
         )
 
     return input_dict
 
 # Scaled data
-
 def get_scaled_data(input_dict):
     data = get_clean_data()
 
@@ -80,26 +82,23 @@ def get_scaled_data(input_dict):
 
     scaled_dict = {}
 
-    for key,value in input_dict.items():
+    for key, value in input_dict.items():
         max_val = X[key].max()
         min_val = X[key].min()
-        scaled_value = (value - min_val)/(max_val - min_val)
+        scaled_value = (value - min_val) / (max_val - min_val)
         scaled_dict[key] = scaled_value
 
     return scaled_dict
-
 
 # radar_chart_visualization col 1
 def get_radar_chart(input_data):
     input_data = get_scaled_data(input_data)
 
-    categories = ['Radius','Texture','Perimeter','Area','Smoothness',
-                 'Compactness','Concavity','Concave points','Symmetry','Fractal dimension' ]
-    
-    # Create the radar chart
+    categories = ['Radius', 'Texture', 'Perimeter', 'Area', 'Smoothness',
+                  'Compactness', 'Concavity', 'Concave points', 'Symmetry', 'Fractal dimension']
+
     fig = go.Figure()
 
-    # Add the traces
     fig.add_trace(
         go.Scatterpolar(
             r=[input_data['radius_mean'], input_data['texture_mean'], input_data['perimeter_mean'],
@@ -134,13 +133,14 @@ def get_radar_chart(input_data):
             name='Worst value'
         )
     )
+
     fig.update_layout(
-    polar=dict(
-        radialaxis=dict(
-        visible=True,
-        range=[0, 1]
-        )),
-    showlegend=True
+        polar=dict(
+            radialaxis=dict(
+                visible=True,
+                range=[0, 1]
+            )),
+        showlegend=True
     )
 
     return fig
@@ -150,52 +150,40 @@ def add_predictions(input_data):
     model = pickle.load(open('model.pkl', 'rb'))
     scaler = pickle.load(open('scaler.pkl', 'rb'))
 
-    input_array = np.array(list(input_data.values())).reshape(1,-1)
+    input_array = np.array(list(input_data.values())).reshape(1, -1)
     input_array_scaled = scaler.transform(input_array)
-    
-    # Making real predictions using the model
-    prediction =  model.predict(input_array_scaled)
-    
+
+    prediction = model.predict(input_array_scaled)
+
     st.subheader("Cell Cluster Prediction")
     st.write("The cell cluster is:")
 
     if prediction[0] == 0:
-        st.write('Begnin')
+        st.write('Benign')
     else:
-        st.write('Malicious')
-    
+        st.write('Malignant')
 
-    st.write("The probability of being Benign: ",model.predict_proba(input_array_scaled)[0][0])
-    st.write("The probability of being Malicious: ",model.predict_proba(input_array_scaled)[0][1])
-    st.write("This app can aassist medical professionals in making a diagnosis.")
-
+    st.write("The probability of being Benign: ", model.predict_proba(input_array_scaled)[0][0])
+    st.write("The probability of being Malignant: ", model.predict_proba(input_array_scaled)[0][1])
+    st.write("This app can assist medical professionals in making a diagnosis.")
 
 # main function
 def main():
-    st.set_page_config(
-        page_title = 'Breast Cancer Predictor',
-        page_icon= ':female_doctor:',
-        layout= 'wide',
-        initial_sidebar_state= 'expanded'
-    )
-
-    # sidebar
-
+    # Sidebar
     input_data = add_sidebar()
-    # st.write(input_data)
-    # container
 
+    # Container
     with st.container():
         st.title('Breast Cancer Predictor')
-        st.write('Machine-learning dashboard to predict whether a cell cluster is benign or malignant using Python and Streamlit. machine-learning dashboard to predict whether a cell cluster is benign or malignant using Python and Streamlit.')
-
-    col1, col2 = st.columns([4,1]) 
+        st.write('A sophisticated machine-learning dashboard designed to predict whether a breast cell cluster is benign or malignant. This intuitive tool leverages Python and Streamlit to provide real-time, data-driven insights, aiding healthcare professionals in making informed diagnostic decisions.')
+    col1, col2 = st.columns([4, 1])
 
     with col1:
         radar_chart = get_radar_chart(input_data)
         st.plotly_chart(radar_chart)
+
     with col2:
-        add_predictions(input_data) 
+        add_predictions(input_data)
 
 
 if __name__ == '__main__':

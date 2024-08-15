@@ -1,0 +1,55 @@
+.st-emotion-cache-j5r0tf{
+   padding: 1rem;
+   border-radius: 0.5rem;
+   background-color: #7E99AB;
+} 
+
+/* style.css */
+
+body {
+   font-family: 'Arial', sans-serif;
+   background-color: #f5f5f5;
+   color: #333;
+}
+
+h1 {
+   color: whitesmoke;
+   text-align: center;
+   margin-bottom: 20px;
+}
+
+.stSidebar {
+   background-color: #e0f7fa;
+   padding: 20px;
+}
+
+.stSlider {
+   color: #00796b;
+}
+
+.stContainer {
+   padding: 20px;
+   background-color: #ffffff;
+   border-radius: 10px;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.stButton > button {
+   background-color: #00796b;
+   color: white;
+   border-radius: 5px;
+   font-size: 16px;
+   padding: 10px 20px;
+   margin-top: 20px;
+}
+
+.stButton > button:hover {
+   background-color: #004d40;
+   color: white;
+}
+
+.custom-col2 {
+   padding: 1rem;
+   border-radius: 0.5rem;
+   background-color: #7E99AB;
+}
